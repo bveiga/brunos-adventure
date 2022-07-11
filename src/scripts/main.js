@@ -2,8 +2,8 @@ window.addEventListener('DOMContentLoaded', () => {
 	const canvas = document.getElementById('game-canvas');
 	const ctx = canvas.getContext('2d');
 
-	canvas.width = 800;
-	canvas.height = 720;
+	canvas.width = window.innerWidth;
+	canvas.height = window.innerHeight;
 
 	class InputHandler {
 		constructor() {
@@ -14,7 +14,7 @@ window.addEventListener('DOMContentLoaded', () => {
 					case 'ArrowUp':
 					case 'ArrowLeft':
 					case 'ArrowRight':
-						this.keys.add(evt.key)
+						this.keys.add(evt.key);
 					default:
 						break;
 				}
@@ -27,7 +27,7 @@ window.addEventListener('DOMContentLoaded', () => {
 					case 'ArrowUp':
 					case 'ArrowLeft':
 					case 'ArrowRight':
-						this.keys.delete(evt.key)
+						this.keys.delete(evt.key);
 					default:
 						break;
 				}
@@ -40,15 +40,19 @@ window.addEventListener('DOMContentLoaded', () => {
 		constructor(gameWidth, gameHeight) {
 			this.gameWidth = gameWidth;
 			this.gameHeight = gameHeight;
+			this.width = 30;
+			this.height = 30;
+			this.gravity = 1;
 
-			// Positions
-			this.width = 200;
-			this.height = 200;
-			this.x = 0;
-			this.y = this.gameHeight - this.height;
-			this.speed = 0;
-			this.vy = 0;
-			this.weight = 1;
+			this.position = {
+				x: 100,
+				y: 100
+			};
+
+			this.velocity = {
+				x: 0,
+				y: 1
+			};
 
 			// Image
 			this.image = document.getElementById('player-image');
@@ -58,15 +62,15 @@ window.addEventListener('DOMContentLoaded', () => {
 
 		draw(context) {
 			context.fillStyle = 'white';
-			context.fillRect(this.x, this.y, this.width, this.height);
+			context.fillRect(this.position.x, this.position.y, this.width, this.height);
 			context.drawImage(
 				this.image,
 				this.frameX * this.width,
 				this.frameY * this.height,
 				this.width,
 				this.height,
-				this.x,
-				this.y,
+				this.position.x,
+				this.position.y,
 				this.width,
 				this.height
 			);
@@ -75,39 +79,64 @@ window.addEventListener('DOMContentLoaded', () => {
 		update(input) {
 			// Horizontal movement
 			if (input.keys.has('ArrowRight')) {
-				this.speed = 5;
+				this.velocity.x = 5;
 			} else if(input.keys.has('ArrowLeft')) {
-				this.speed = -5;
+				this.velocity.x = -5;
 			} else {
-				this.speed = 0;
+				this.velocity.x = 0;
 			}
 
-			this.x += this.speed;
-			if(this.x < 0) {
-				this.x = 0;
-			} else if(this.x > this.gameWidth - this.width) {
-				this.x = this.gameWidth - this.width;
+			this.position.x += this.velocity.x;
+			if(this.position.x < 0) {
+				this.position.x = 0;
+			} else if(this.position.x > this.gameWidth - this.width) {
+				this.position.x = this.gameWidth - this.width;
 			}
 
 			// Vertical movement
-			if(input.keys.has('ArrowUp') && this.onGround()) {
-				this.vy = -30;
+			if(input.keys.has('ArrowUp') && !this.isInTheAir()) {
+				this.velocity.y = -20;
 			}
 
-			this.y += this.vy;
-			if(!this.onGround()) {
-				this.vy += this.weight;
+			this.position.y += this.velocity.y;
+			if(this.isInTheAir()) {
+				this.velocity.y += this.gravity;
 			} else {
-				this.vy = 0;
+				this.velocity.y = 0;
 			}
 
-			if (this.y > this.gameHeight - this.height) {
-				this.y = this.gameHeight - this.height;
+			if (this.position.y > this.gameHeight - this.height) {
+				this.position.y = this.gameHeight - this.height;
 			}
 		}
 
-		onGround() {
-			return this.y >= this.gameHeight - this.height;
+		isInTheAir() {
+			return this.position.y + this.height + this.velocity.y <= this.gameHeight;
+		}
+	}
+
+	class Platform {
+		constructor(gameWidth, gameHeight) {
+			this.gameWidth = gameWidth;
+			this.gameHeight = gameHeight;
+
+			this.position = {
+				x: 0,
+				y: this.gameHeight - 100
+			};
+
+			this.width = 2000;
+			this.height = 20;
+		}
+
+		draw(context) {
+			context.fillStyle = 'Blue';
+			context.fillRect(
+				this.position.x,
+				this.position.y,
+				this.width,
+				this.height
+			);
 		}
 	}
 
@@ -136,14 +165,20 @@ window.addEventListener('DOMContentLoaded', () => {
 
 	const input = new InputHandler();
 	const player = new Player(canvas.width, canvas.height);
+	const platform = new Platform(canvas.width, canvas.height);
 	const background = new Background(canvas.width, canvas.height);
 
 	function animate() {
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
-		background.draw(ctx);
-		background.update();
+
+		platform.draw(ctx);
+
+		// background.draw(ctx);
+		// background.update();
+
 		player.draw(ctx);
 		player.update(input);
+
 		requestAnimationFrame(animate);
 	}
 	animate();
