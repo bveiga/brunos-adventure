@@ -121,11 +121,11 @@ window.addEventListener('DOMContentLoaded', () => {
 			this.gameHeight = gameHeight;
 
 			this.position = {
-				x: 0,
+				x: 100,
 				y: this.gameHeight - 100
 			};
 
-			this.width = 2000;
+			this.width = 200;
 			this.height = 20;
 		}
 
