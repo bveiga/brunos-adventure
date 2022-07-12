@@ -8,11 +8,13 @@ export default class GameEngine {
 	keys: Set<string>;
 	player: Player;
 	platforms: Platform[];
+	scrollOffset: number;
 
 	constructor() {
 		// Get canvas
 		this.canvas = document.getElementById('game-canvas') as HTMLCanvasElement;
 		this.context = this.canvas?.getContext('2d') as CanvasRenderingContext2D;
+		this.scrollOffset = 0;
 
 		// Set game dimensions
 		this.canvas.width = window.innerWidth;
@@ -35,7 +37,6 @@ export default class GameEngine {
 				default:
 					break;
 			}
-			console.log(evt.key, this.keys);
 		});
 
 		window.addEventListener('keyup', (evt) => {
@@ -48,7 +49,6 @@ export default class GameEngine {
 				default:
 					break;
 			}
-			console.log(evt.key, this.keys);
 		});
 	}
 
@@ -71,10 +71,12 @@ export default class GameEngine {
 			this.player.velocity.x = 0;
 
 			if(this.keys.has('ArrowRight')) {
+				this.scrollOffset += 5;
 				this.platforms.forEach((platform) => {
 					platform.position.x -= 5;
 				});
 			} else if(this.keys.has('ArrowLeft')) {
+				this.scrollOffset -= 5;
 				this.platforms.forEach((platform) => {
 					platform.position.x += 5;
 				});
@@ -83,6 +85,11 @@ export default class GameEngine {
 
 		if(this.keys.has('ArrowUp') && !this.player.isInTheAir()) {
 			this.player.velocity.y = -20;
+		}
+
+		console.log('scroll: '+this.scrollOffset);
+		if(this.scrollOffset >= 2000) {
+			console.log('You Win!');
 		}
 	}
 }
