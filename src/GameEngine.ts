@@ -50,7 +50,7 @@ export default class GameEngine {
 		});
 	}
 
-	playerCollision(platform: Platform) {
+	handleCollision(platform: Platform) {
 		if(this.player.position.y + this.player.height <= platform.position.y
 			&& this.player.position.y + this.player.height + this.player.velocity.y >= platform.position.y
 			&& this.player.position.x + this.player.width >= platform.position.x
@@ -67,6 +67,12 @@ export default class GameEngine {
 			this.player.velocity.x = -5;
 		} else {
 			this.player.velocity.x = 0;
+
+			if(this.keys.has('ArrowRight')) {
+				this.platform.position.x -= 5;
+			} else if(this.keys.has('ArrowLeft')) {
+				this.platform.position.x += 5;
+			}
 		}
 
 		if(this.keys.has('ArrowUp') && !this.player.isInTheAir()) {

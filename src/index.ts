@@ -12,7 +12,7 @@ function animate() {
 
 	// this.platforms.forEach((platform) => {
 		gameEngine.platform.draw(gameEngine.context);
-		gameEngine.playerCollision(gameEngine.platform);
+		gameEngine.handleCollision(gameEngine.platform);
 	// });
 }
 animate();
