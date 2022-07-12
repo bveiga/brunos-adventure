@@ -17,18 +17,18 @@ export default class GameEngine {
 		this.scrollOffset = 0;
 
 		// Set game dimensions
-		this.canvas.width = window.innerWidth;
-		this.canvas.height = window.innerHeight;
+		this.canvas.width = 1024;
+		this.canvas.height = 576;
 
 		this.player = new Player(this.canvas.width, this.canvas.height);
+		this.platforms = [];
 
-		let image = new Image();
-		image.src = PlatformImageSrc;
-
-		this.platforms = [
-			new Platform({x: 100, y: this.canvas.height - 100}),
-			new Platform({x: 400, y: this.canvas.height - 100})
-		];
+		let platformImage = new Image();
+		platformImage.src = PlatformImageSrc;
+		platformImage.onload = () => {
+			this.platforms.push(new Platform({x: 100, y: this.canvas.height - platformImage.height}, platformImage));
+			this.platforms.push(new Platform({x: 680, y: this.canvas.height - platformImage.height}, platformImage));
+		};
 
 		this.keys = new Set();
 		window.addEventListener('keydown', (evt) => {
@@ -91,7 +91,6 @@ export default class GameEngine {
 			this.player.velocity.y = -20;
 		}
 
-		console.log('scroll: '+this.scrollOffset);
 		if(this.scrollOffset >= 2000) {
 			console.log('You Win!');
 		}
