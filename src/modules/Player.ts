@@ -8,7 +8,6 @@ export default class Player {
 	gravity: number;
 	position: AxisTuple;
 	velocity: AxisTuple;
-	image: HTMLImageElement;
 	frameX: number;
 	frameY: number;
 
@@ -30,25 +29,13 @@ export default class Player {
 		};
 
 		// Image
-		this.image = document.getElementById('player-image') as HTMLImageElement;
 		this.frameX = 0;
 		this.frameY = 0;
 	}
 
 	draw(context: CanvasRenderingContext2D ) {
-		context.fillStyle = 'white';
+		context.fillStyle = 'red';
 		context.fillRect(this.position.x, this.position.y, this.width, this.height);
-		context.drawImage(
-			this.image,
-			this.frameX * this.width,
-			this.frameY * this.height,
-			this.width,
-			this.height,
-			this.position.x,
-			this.position.y,
-			this.width,
-			this.height
-		);
 	}
 
 	update() {
