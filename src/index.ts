@@ -10,9 +10,9 @@ function animate() {
 	gameEngine.player.update();
 	gameEngine.handleInput();
 
-	// this.platforms.forEach((platform) => {
-		gameEngine.platform.draw(gameEngine.context);
-		gameEngine.handleCollision(gameEngine.platform);
-	// });
+	gameEngine.platforms.forEach((platform) => {
+		platform.draw(gameEngine.context);
+		gameEngine.handleCollision(platform);
+	});
 }
 animate();

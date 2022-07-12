@@ -6,8 +6,7 @@ export default class GameEngine {
 	context: CanvasRenderingContext2D;
 	keys: Set<string>;
 	player: Player;
-	// platforms: Platform[];
-	platform: Platform;
+	platforms: Platform[];
 
 	constructor() {
 		// Get canvas
@@ -19,8 +18,7 @@ export default class GameEngine {
 		this.canvas.height = window.innerHeight;
 
 		this.player = new Player(this.canvas.width, this.canvas.height);
-		this.platform = new Platform(this.canvas.width, this.canvas.height);
-		// this.platforms = [new Platform(this.canvas.width, this.canvas.height)];
+		this.platforms = [new Platform(this.canvas.width, this.canvas.height)];
 
 		this.keys = new Set();
 		window.addEventListener('keydown', (evt) => {
@@ -69,9 +67,13 @@ export default class GameEngine {
 			this.player.velocity.x = 0;
 
 			if(this.keys.has('ArrowRight')) {
-				this.platform.position.x -= 5;
+				this.platforms.forEach((platform) => {
+					platform.position.x -= 5;
+				});
 			} else if(this.keys.has('ArrowLeft')) {
-				this.platform.position.x += 5;
+				this.platforms.forEach((platform) => {
+					platform.position.x += 5;
+				});
 			}
 		}
 
