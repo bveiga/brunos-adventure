@@ -4,15 +4,16 @@ let gameEngine = new GameEngine();
 
 function animate() {
 	requestAnimationFrame(animate);
-	gameEngine.context?.clearRect(0, 0, gameEngine.canvas.width, gameEngine.canvas.height);
-
-	gameEngine.player.draw(gameEngine.context);
-	gameEngine.player.update();
+	gameEngine.context.fillStyle = 'white';
+	gameEngine.context?.fillRect(0, 0, gameEngine.canvas.width, gameEngine.canvas.height);
 	gameEngine.handleInput();
 
 	gameEngine.platforms.forEach((platform) => {
 		platform.draw(gameEngine.context);
 		gameEngine.handleCollision(platform);
 	});
+
+	gameEngine.player.draw(gameEngine.context);
+	gameEngine.player.update();
 }
 animate();
