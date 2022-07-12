@@ -1,4 +1,4 @@
-import { AxisTuple } from "./types";
+import { AxisTuple } from "../types";
 
 export default class Platform {
 	width: number;

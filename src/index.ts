@@ -1,4 +1,4 @@
-import GameEngine from './GameEngine';
+import GameEngine from './modules/GameEngine';
 
 let gameEngine = new GameEngine();
 

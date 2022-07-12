@@ -1,6 +1,6 @@
 import Platform from "./Platform";
 import Player from "./Player";
-import { AxisTuple } from "./types";
+import PlatformImageSrc from '../images/platform.png';
 
 export default class GameEngine {
 	canvas: HTMLCanvasElement;
@@ -21,6 +21,10 @@ export default class GameEngine {
 		this.canvas.height = window.innerHeight;
 
 		this.player = new Player(this.canvas.width, this.canvas.height);
+
+		let image = new Image();
+		image.src = PlatformImageSrc;
+
 		this.platforms = [
 			new Platform({x: 100, y: this.canvas.height - 100}),
 			new Platform({x: 400, y: this.canvas.height - 100})

@@ -1,5 +1,4 @@
-import GameEngine from "./GameEngine";
-import { AxisTuple } from "./types";
+import { AxisTuple } from "../types";
 
 export default class Player {
 	gameWidth: number;
