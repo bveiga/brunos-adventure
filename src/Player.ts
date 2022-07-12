@@ -1,5 +1,5 @@
 import GameEngine from "./GameEngine";
-import { Direction } from "./types";
+import { AxisTuple } from "./types";
 
 export default class Player {
 	gameWidth: number;
@@ -7,8 +7,8 @@ export default class Player {
 	width: number;
 	height: number;
 	gravity: number;
-	position: Direction;
-	velocity: Direction;
+	position: AxisTuple;
+	velocity: AxisTuple;
 	image: HTMLImageElement;
 	frameX: number;
 	frameY: number;

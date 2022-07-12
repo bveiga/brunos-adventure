@@ -1,19 +1,14 @@
-import { Direction } from "./types";
+import { AxisTuple } from "./types";
 
 export default class Platform {
-	gameWidth: number;
-	gameHeight: number;
 	width: number;
 	height: number;
-	position: Direction;
+	position: AxisTuple;
 
-	constructor(gameWidth: number, gameHeight: number) {
-		this.gameWidth = gameWidth;
-		this.gameHeight = gameHeight;
-
+	constructor(position: AxisTuple) {
 		this.position = {
-			x: 100,
-			y: this.gameHeight - 100
+			x: position.x,
+			y: position.y
 		};
 
 		this.width = 300;
