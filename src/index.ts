@@ -1,31 +1,18 @@
-import InputHandler from './InputHandler';
-import Platform from './Platform';
-import Player from './Player';
+import GameEngine from './GameEngine';
 
-const canvas = document.getElementById('game-canvas') as HTMLCanvasElement;
-const ctx = canvas?.getContext('2d') as CanvasRenderingContext2D;
+let gameEngine = new GameEngine();
 
-// Set game dimensions
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
-
-const input = new InputHandler();
-const player = new Player(canvas.width, canvas.height);
-const platform = new Platform(canvas.width, canvas.height);
-
-// Game loop
 function animate() {
-	// Resets canvas
-	ctx?.clearRect(0, 0, canvas.width, canvas.height);
-
-	platform.draw(ctx);
-
-	// background.draw(ctx);
-	// background.update();
-
-	player.draw(ctx);
-	player.update(input);
-
 	requestAnimationFrame(animate);
+	gameEngine.context?.clearRect(0, 0, gameEngine.canvas.width, gameEngine.canvas.height);
+
+	gameEngine.player.draw(gameEngine.context);
+	gameEngine.player.update();
+	gameEngine.handleInput();
+
+	// this.platforms.forEach((platform) => {
+		gameEngine.platform.draw(gameEngine.context);
+		gameEngine.playerCollision(gameEngine.platform);
+	// });
 }
 animate();

@@ -1,7 +1,7 @@
-import InputHandler from "./InputHandler";
+import GameEngine from "./GameEngine";
 import { Direction } from "./types";
 
-export default class Player<PlayerProps> {
+export default class Player {
 	gameWidth: number;
 	gameHeight: number;
 	width: number;
@@ -52,16 +52,8 @@ export default class Player<PlayerProps> {
 		);
 	}
 
-	update(input: InputHandler) {
+	update() {
 		// Horizontal movement
-		if (input.keys.has('ArrowRight')) {
-			this.velocity.x = 5;
-		} else if(input.keys.has('ArrowLeft')) {
-			this.velocity.x = -5;
-		} else {
-			this.velocity.x = 0;
-		}
-
 		this.position.x += this.velocity.x;
 		if(this.position.x < 0) {
 			this.position.x = 0;
@@ -70,10 +62,6 @@ export default class Player<PlayerProps> {
 		}
 
 		// Vertical movement
-		if(input.keys.has('ArrowUp') && !this.isInTheAir()) {
-			this.velocity.y = -20;
-		}
-
 		this.position.y += this.velocity.y;
 		if(this.isInTheAir()) {
 			this.velocity.y += this.gravity;
