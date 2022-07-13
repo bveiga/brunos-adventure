@@ -16,12 +16,12 @@ module.exports = {
 			}
 		],
 	},
+	output: {
+		assetModuleFilename: 'images/[name][ext]',
+		filename: 'scripts/bundle.js',
+		path: path.resolve(__dirname, 'dist')
+	},
 	resolve: {
 		extensions: ['.tsx', '.ts', '.js'],
-	},
-	output: {
-		filename: 'scripts/bundle.js',
-		assetModuleFilename: 'images/[name][ext]',
-		path: path.resolve(__dirname, 'dist')
 	},
 };
