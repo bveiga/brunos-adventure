@@ -6,6 +6,7 @@ import BgImageSrc from '../images/background.png';
 import GenericObject from "./GenericObject";
 
 export default class GameEngine {
+	activePlatform: number;
 	canvas: HTMLCanvasElement;
 	context: CanvasRenderingContext2D;
 	genericObjects: GenericObject[];
@@ -24,6 +25,7 @@ export default class GameEngine {
 		this.canvas.width = 1024;
 		this.canvas.height = 576;
 
+		this.activePlatform = 0;
 		this.player = new Player(this.canvas.width, this.canvas.height);
 		this.platforms = [];
 		this.genericObjects = [];
@@ -34,10 +36,11 @@ export default class GameEngine {
 		window.addEventListener('keydown', (evt) => {
 			switch(evt.key) {
 				case 'ArrowDown':
-				case 'ArrowUp':
 				case 'ArrowLeft':
 				case 'ArrowRight':
+				case 'ArrowUp':
 					this.keys.add(evt.key);
+					break;
 				default:
 					break;
 			}
@@ -46,10 +49,11 @@ export default class GameEngine {
 		window.addEventListener('keyup', (evt) => {
 			switch(evt.key) {
 				case 'ArrowDown':
-				case 'ArrowUp':
 				case 'ArrowLeft':
 				case 'ArrowRight':
+				case 'ArrowUp':
 					this.keys.delete(evt.key);
+					break;
 				default:
 					break;
 			}
@@ -96,10 +100,16 @@ export default class GameEngine {
 			&& this.player.position.x + this.player.width <= platform.position.x + platform.width
 		) {
 			this.player.velocity.y = 0;
+
+			// Only allow jumps from platforms
+			if(this.keys.has('ArrowUp')) {
+				this.player.velocity.y = -20;
+			}
 		}
 	}
 
 	handleInput() {
+		// Horizontal movement for player, platform, and objects
 		if (this.keys.has('ArrowRight') && this.player.position.x < 400) {
 			this.player.velocity.x = 5;
 		} else if(this.keys.has('ArrowLeft') && this.player.position.x > 100) {
@@ -126,10 +136,6 @@ export default class GameEngine {
 					genericObject.position.x += 3;
 				});
 			}
-		}
-
-		if(this.keys.has('ArrowUp') && !this.player.isInTheAir()) {
-			this.player.velocity.y = -20;
 		}
 	}
 }

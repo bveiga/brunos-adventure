@@ -49,12 +49,8 @@ export default class Player {
 
 		// Vertical movement
 		this.position.y += this.velocity.y;
-		if(this.isInTheAir()) {
+		if(this.position.y + this.height + this.velocity.y <= this.gameHeight) {
 			this.velocity.y += this.gravity;
 		}
-	}
-
-	isInTheAir() {
-		return this.position.y + this.height + this.velocity.y <= this.gameHeight;
 	}
 }
