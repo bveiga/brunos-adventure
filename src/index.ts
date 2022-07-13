@@ -8,6 +8,10 @@ function animate() {
 	gameEngine.context?.fillRect(0, 0, gameEngine.canvas.width, gameEngine.canvas.height);
 	gameEngine.handleInput();
 
+	gameEngine.genericObjects.forEach((genericObject) => {
+		genericObject.draw(gameEngine.context);
+	});
+
 	gameEngine.platforms.forEach((platform) => {
 		platform.draw(gameEngine.context);
 		gameEngine.handleCollision(platform);

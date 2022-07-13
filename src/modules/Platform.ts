@@ -18,13 +18,6 @@ export default class Platform {
 	}
 
 	draw(context: CanvasRenderingContext2D) {
-		// context.fillStyle = 'Blue';
-		// context.fillRect(
-		// 	this.position.x,
-        //     this.position.y,
-        //     this.width,
-        //     this.height
-		// );
 		context.drawImage(
 			this.image,
 			this.position.x,

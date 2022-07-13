@@ -1,10 +1,14 @@
 import Platform from "./Platform";
 import Player from "./Player";
 import PlatformImageSrc from '../images/platform.png';
+import HillImageSrc from '../images/hills.png';
+import BgImageSrc from '../images/background.png';
+import GenericObject from "./GenericObject";
 
 export default class GameEngine {
 	canvas: HTMLCanvasElement;
 	context: CanvasRenderingContext2D;
+	genericObjects: GenericObject[];
 	keys: Set<string>;
 	player: Player;
 	platforms: Platform[];
@@ -22,13 +26,19 @@ export default class GameEngine {
 
 		this.player = new Player(this.canvas.width, this.canvas.height);
 		this.platforms = [];
+		this.genericObjects = [];
 
-		let platformImage = new Image();
-		platformImage.src = PlatformImageSrc;
-		platformImage.onload = () => {
-			this.platforms.push(new Platform({x: 100, y: this.canvas.height - platformImage.height}, platformImage));
-			this.platforms.push(new Platform({x: 680, y: this.canvas.height - platformImage.height}, platformImage));
-		};
+		// Creating Platforms
+		this.createImage(PlatformImageSrc).then((image: HTMLImageElement) => {
+			this.platforms.push(new Platform({x: 100, y: this.canvas.height - image.height}, image));
+			this.platforms.push(new Platform({x: 100 + image.width - 3, y: this.canvas.height - image.height}, image));
+		});
+
+		// Creating Generic Objects
+		this.createImage(HillImageSrc).then((image: HTMLImageElement) => {
+			this.genericObjects.push(new GenericObject ({x: -1, y: -1}, image));
+			this.genericObjects.push(new GenericObject ({x: -1, y: -1}, image));
+		});
 
 		this.keys = new Set();
 		window.addEventListener('keydown', (evt) => {
@@ -54,6 +64,13 @@ export default class GameEngine {
 					break;
 			}
 		});
+	}
+
+	async createImage(imageSrc: string) {
+		let image = new Image();
+		image.src = imageSrc;
+		await image.decode();
+		return image;
 	}
 
 	handleCollision(platform: Platform) {
