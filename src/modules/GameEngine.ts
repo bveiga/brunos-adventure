@@ -69,7 +69,12 @@ export default class GameEngine {
 	async createImage(imageSrc: string) {
 		let image = new Image();
 		image.src = imageSrc;
-		await image.decode();
+
+		try {
+			await image.decode();
+		} catch {
+			console.log('Error 001: Error decoding image.');
+		}
 		return image;
 	}
 
