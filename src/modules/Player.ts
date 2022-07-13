@@ -25,7 +25,7 @@ export default class Player {
 
 		this.velocity = {
 			x: 0,
-			y: 1
+			y: 0
 		};
 
 		// Image
@@ -51,12 +51,6 @@ export default class Player {
 		this.position.y += this.velocity.y;
 		if(this.isInTheAir()) {
 			this.velocity.y += this.gravity;
-		} else {
-			this.velocity.y = 0;
-		}
-
-		if (this.position.y > this.gameHeight - this.height) {
-			this.position.y = this.gameHeight - this.height;
 		}
 	}
 

@@ -19,5 +19,16 @@ function animate() {
 
 	gameEngine.player.draw(gameEngine.context);
 	gameEngine.player.update();
+
+	// Win Condition
+	if(gameEngine.scrollOffset >= 1000) {
+		console.log('You Win!');
+	}
+
+	// Lose Condition
+	if (gameEngine.player.position.y > gameEngine.canvas.height - gameEngine.player.height) {
+		console.log('You Lose!');
+		gameEngine.init(true);
+	}
 }
 animate();

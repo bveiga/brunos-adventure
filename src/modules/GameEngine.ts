@@ -28,17 +28,7 @@ export default class GameEngine {
 		this.platforms = [];
 		this.genericObjects = [];
 
-		// Creating Platforms
-		this.createImage(PlatformImageSrc).then((image: HTMLImageElement) => {
-			this.platforms.push(new Platform({x: 100, y: this.canvas.height - image.height}, image));
-			this.platforms.push(new Platform({x: 100 + image.width - 3, y: this.canvas.height - image.height}, image));
-		});
-
-		// Creating Generic Objects
-		this.createImage(HillImageSrc).then((image: HTMLImageElement) => {
-			this.genericObjects.push(new GenericObject ({x: -1, y: -1}, image));
-			this.genericObjects.push(new GenericObject ({x: -1, y: -1}, image));
-		});
+		this.init(false);
 
 		this.keys = new Set();
 		window.addEventListener('keydown', (evt) => {
@@ -63,6 +53,27 @@ export default class GameEngine {
 				default:
 					break;
 			}
+		});
+	}
+
+	init(isReset: Boolean) {
+		if(isReset) {
+			this.player = new Player(this.canvas.width, this.canvas.height);
+			this.platforms = [];
+			this.genericObjects = [];
+		}
+
+		// Creating Platforms
+		this.createImage(PlatformImageSrc).then((image: HTMLImageElement) => {
+			this.platforms.push(new Platform({x: 0, y: this.canvas.height - image.height}, image));
+			this.platforms.push(new Platform({x: image.width - 3, y: this.canvas.height - image.height}, image));
+			this.platforms.push(new Platform({x: (image.width * 2) + 100, y: this.canvas.height - image.height}, image));
+		});
+
+		// Creating Generic Objects
+		this.createImage(HillImageSrc).then((image: HTMLImageElement) => {
+			this.genericObjects.push(new GenericObject ({x: -1, y: -1}, image));
+			this.genericObjects.push(new GenericObject ({x: -1, y: -1}, image));
 		});
 	}
 
@@ -101,20 +112,24 @@ export default class GameEngine {
 				this.platforms.forEach((platform) => {
 					platform.position.x -= 5;
 				});
+
+				this.genericObjects.forEach((genericObject) => {
+					genericObject.position.x -= 3;
+				});
 			} else if(this.keys.has('ArrowLeft')) {
 				this.scrollOffset -= 5;
 				this.platforms.forEach((platform) => {
 					platform.position.x += 5;
+				});
+
+				this.genericObjects.forEach((genericObject) => {
+					genericObject.position.x += 3;
 				});
 			}
 		}
 
 		if(this.keys.has('ArrowUp') && !this.player.isInTheAir()) {
 			this.player.velocity.y = -20;
-		}
-
-		if(this.scrollOffset >= 2000) {
-			console.log('You Win!');
 		}
 	}
 }
