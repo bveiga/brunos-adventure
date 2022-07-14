@@ -1,5 +1,6 @@
 # dependencies
 /node_modules
 
-# production
-/build
+# production scripts
+/dist/scripts
+/dist/images
