@@ -1,15 +1,16 @@
 import { AxisTuple } from "../types";
 
 export default class Player {
-	gameWidth: number;
-	gameHeight: number;
-	width: number;
-	height: number;
-	gravity: number;
-	position: AxisTuple;
-	velocity: AxisTuple;
 	frameX: number;
 	frameY: number;
+	gameHeight: number;
+	gameWidth: number;
+	gravity: number;
+	height: number;
+	position: AxisTuple;
+	speed: number;
+	velocity: AxisTuple;
+	width: number;
 
 	constructor(gameWidth: number, gameHeight: number) {
 		this.gameWidth = gameWidth;
@@ -17,6 +18,7 @@ export default class Player {
 		this.width = 30;
 		this.height = 30;
 		this.gravity = 1;
+		this.speed = 10;
 
 		this.position = {
 			x: 100,

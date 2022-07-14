@@ -21,7 +21,7 @@ function animate() {
 	gameEngine.player.update();
 
 	// Win Condition
-	if(gameEngine.scrollOffset >= 1000) {
+	if(gameEngine.scrollOffset >= 4000) {
 		console.log('You Win!');
 		gameEngine.init(true);
 	}

@@ -1,9 +1,10 @@
 import Platform from "./Platform";
 import Player from "./Player";
-import PlatformImageSrc from '../images/platform.png';
-import HillImageSrc from '../images/hills.png';
-import BgImageSrc from '../images/background.png';
 import GenericObject from "./GenericObject";
+import HillImageSrc from '../images/hills.png';
+import PlatformImageSrc from '../images/platform.png';
+import PlatformSmallImageSrc from "../images/platformSmallTall.png";
+import BgImageSrc from '../images/background.png';
 
 export default class GameEngine {
 	activePlatform: number;
@@ -68,17 +69,39 @@ export default class GameEngine {
 			this.scrollOffset = 0;
 		}
 
-		// Creating Platforms
-		this.createImage(PlatformImageSrc).then((image: HTMLImageElement) => {
-			this.platforms.push(new Platform({x: 0, y: this.canvas.height - image.height}, image));
-			this.platforms.push(new Platform({x: image.width - 3, y: this.canvas.height - image.height}, image));
-			this.platforms.push(new Platform({x: (image.width * 2) + 100, y: this.canvas.height - image.height}, image));
+		// Creating small platforms
+		this.createImage(PlatformSmallImageSrc).then((image: HTMLImageElement) => {
+			let newSmallPlatforms = [
+				new Platform({x: 1400, y: this.canvas.height - image.height}, image),
+				new Platform({x: 3010, y: this.canvas.height - image.height - 100}, image)
+			];
+			this.platforms.push(...newSmallPlatforms);
 		});
 
-		// Creating Generic Objects
+		// Creating wide platforms
+		this.createImage(PlatformImageSrc).then((image: HTMLImageElement) => {
+			let newPlatforms = [
+				new Platform({x: 0, y: this.canvas.height - image.height}, image),
+				new Platform({x: 580 - 3, y: this.canvas.height - image.height}, image),
+				new Platform({x: (580 * 2) + 100, y: this.canvas.height - image.height}, image),
+				new Platform({x: (580 * 3) + 250, y: this.canvas.height - image.height}, image),
+				new Platform({x: (580 * 4) + 400, y: this.canvas.height - image.height}, image)
+			];
+			this.platforms.push(...newPlatforms);
+		});
+
+		// Creating background
+		this.createImage(BgImageSrc).then((image: HTMLImageElement) => {
+			this.genericObjects.push(new GenericObject({x: -1, y: -1}, image));
+		});
+
+		// Creating Hills
 		this.createImage(HillImageSrc).then((image: HTMLImageElement) => {
-			this.genericObjects.push(new GenericObject ({x: -1, y: -1}, image));
-			this.genericObjects.push(new GenericObject ({x: -1, y: -1}, image));
+			let newHills = [
+				new GenericObject ({x: -1, y: -1}, image),
+				new GenericObject ({x: -1, y: -1}, image)
+			];
+			this.genericObjects.push(...newHills);
 		});
 	}
 
@@ -112,29 +135,29 @@ export default class GameEngine {
 	handleInput() {
 		// Horizontal movement for player, platform, and objects
 		if (this.keys.has('ArrowRight') && this.player.position.x < 400) {
-			this.player.velocity.x = 5;
+			this.player.velocity.x = this.player.speed;
 		} else if(this.keys.has('ArrowLeft') && this.player.position.x > 100) {
-			this.player.velocity.x = -5;
+			this.player.velocity.x = -this.player.speed;
 		} else {
 			this.player.velocity.x = 0;
 
 			if(this.keys.has('ArrowRight')) {
-				this.scrollOffset += 5;
+				this.scrollOffset += this.player.speed;
 				this.platforms.forEach((platform) => {
-					platform.position.x -= 5;
+					platform.position.x -= this.player.speed;
 				});
 
 				this.genericObjects.forEach((genericObject) => {
-					genericObject.position.x -= 3;
+					genericObject.position.x -= this.player.speed * .66;
 				});
 			} else if(this.keys.has('ArrowLeft')) {
-				this.scrollOffset -= 5;
+				this.scrollOffset -= this.player.speed;
 				this.platforms.forEach((platform) => {
-					platform.position.x += 5;
+					platform.position.x += this.player.speed;
 				});
 
 				this.genericObjects.forEach((genericObject) => {
-					genericObject.position.x += 3;
+					genericObject.position.x += this.player.speed * .66;
 				});
 			}
 		}
