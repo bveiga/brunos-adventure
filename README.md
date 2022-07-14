@@ -1,5 +1,5 @@
 # Bruno's Adventure
-A simple 2D side scrolling game built using JavaScript.
+A simple 2D side scrolling game built using TypeScript.
 
 ## Version History
 v0.1.0
