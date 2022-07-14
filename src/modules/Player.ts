@@ -1,18 +1,19 @@
 import { AxisTuple } from "../types";
 
 export default class Player {
-	frame: AxisTuple;
+	currentSprite: number;
+	frames: AxisTuple;
 	gameHeight: number;
 	gameWidth: number;
 	gravity: number;
 	height: number;
-	image: HTMLImageElement;
 	position: AxisTuple;
 	speed: number;
+	sprites: HTMLImageElement[];
 	velocity: AxisTuple;
 	width: number;
 
-	constructor(gameWidth: number, gameHeight: number, image: HTMLImageElement) {
+	constructor(gameWidth: number, gameHeight: number, sprites: HTMLImageElement[]) {
 		this.gameWidth = gameWidth;
 		this.gameHeight = gameHeight;
 		this.gravity = 1;
@@ -29,22 +30,24 @@ export default class Player {
 		};
 
 		// Image
-		this.image = image;
+		this.sprites = sprites;
+		this.currentSprite = 3;
+
 		this.width = 66;
 		this.height = 150;
-		this.frame ={
-			x: 177,
-			y: 400
+		this.frames ={
+			x: 1,
+			y: 0
 		};
 	}
 
 	draw(context: CanvasRenderingContext2D ) {
 		context.drawImage(
-			this.image,
+			this.sprites[this.currentSprite],
+			177 * this.frames.x,
 			0,
-			0,
-			this.frame.x,
-			this.frame.y,
+			177,
+			400,
 			this.position.x,
 			this.position.y,
 			this.width,
@@ -53,6 +56,11 @@ export default class Player {
 	}
 
 	update() {
+		this.frames.x++;
+		if(this.frames.x > 28) {
+			this.frames.x = 0;
+		}
+
 		// Horizontal movement
 		this.position.x += this.velocity.x;
 		if(this.position.x < 0) {
