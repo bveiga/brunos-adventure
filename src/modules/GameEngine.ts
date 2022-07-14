@@ -1,14 +1,6 @@
 import Platform from "./Platform";
 import Player from "./Player";
 import GenericObject from "./GenericObject";
-import HillImageSrc from '../images/hills.png';
-import PlatformImageSrc from '../images/platform.png';
-import PlatformSmallImageSrc from "../images/platformSmallTall.png";
-import BgImageSrc from '../images/background.png';
-import spriteRunLeftSrc from '../images/spriteRunLeft.png';
-import spriteRunRightSrc from '../images/spriteRunRight.png';
-import spriteStandLeftSrc from '../images/spriteStandLeft.png';
-import spriteStandRightSrc from '../images/spriteStandRight.png';
 import { Assets } from "../types";
 
 export default class GameEngine {
@@ -40,9 +32,19 @@ export default class GameEngine {
 		window.addEventListener('keydown', (evt) => {
 			switch(evt.key) {
 				case 'ArrowDown':
-				case 'ArrowLeft':
-				case 'ArrowRight':
 				case 'ArrowUp':
+					this.keys.add(evt.key);
+					break;
+				case 'ArrowLeft':
+					this.player.spriteCrop.x = this.player.sprites.run.crop;
+					this.player.width = this.player.sprites.run.width;
+					this.player.currentSprite = this.player.sprites.run.left;
+					this.keys.add(evt.key);
+					break;
+				case 'ArrowRight':
+					this.player.spriteCrop.x = this.player.sprites.run.crop;
+					this.player.width = this.player.sprites.run.width;
+					this.player.currentSprite = this.player.sprites.run.right;
 					this.keys.add(evt.key);
 					break;
 				default:
@@ -53,9 +55,19 @@ export default class GameEngine {
 		window.addEventListener('keyup', (evt) => {
 			switch(evt.key) {
 				case 'ArrowDown':
-				case 'ArrowLeft':
-				case 'ArrowRight':
 				case 'ArrowUp':
+					this.keys.delete(evt.key);
+					break;
+				case 'ArrowLeft':
+					this.player.spriteCrop.x = this.player.sprites.stand.crop;
+					this.player.width = this.player.sprites.stand.width;
+					this.player.currentSprite = this.player.sprites.stand.left;
+					this.keys.delete(evt.key);
+					break;
+				case 'ArrowRight':
+					this.player.spriteCrop.x = this.player.sprites.stand.crop;
+					this.player.width = this.player.sprites.stand.width;
+					this.player.currentSprite = this.player.sprites.stand.right;
 					this.keys.delete(evt.key);
 					break;
 				default:

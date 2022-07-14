@@ -1,7 +1,7 @@
 import { AxisTuple } from "../types";
 
 export default class Player {
-	currentSprite: number;
+	currentSprite: HTMLImageElement;
 	frames: AxisTuple;
 	gameHeight: number;
 	gameWidth: number;
@@ -9,11 +9,12 @@ export default class Player {
 	height: number;
 	position: AxisTuple;
 	speed: number;
-	sprites: HTMLImageElement[];
+	spriteCrop: AxisTuple;
+	sprites: any;
 	velocity: AxisTuple;
 	width: number;
 
-	constructor(gameWidth: number, gameHeight: number, sprites: HTMLImageElement[]) {
+	constructor(gameWidth: number, gameHeight: number, images: HTMLImageElement[]) {
 		this.gameWidth = gameWidth;
 		this.gameHeight = gameHeight;
 		this.gravity = 1;
@@ -30,24 +31,43 @@ export default class Player {
 		};
 
 		// Image
-		this.sprites = sprites;
-		this.currentSprite = 3;
+		this.sprites = {
+			stand: {
+				crop: 177,
+				left: images[2],
+				right: images[3],
+				width: 66,
+			},
+			run: {
+				crop: 341,
+				left: images[0],
+				right: images[1],
+				width: 127.875,
+			}
+		};
+
+		this.currentSprite = this.sprites.stand.right;
+
+		this.spriteCrop = {
+			x: 177,
+			y: 400
+		}
 
 		this.width = 66;
 		this.height = 150;
 		this.frames ={
-			x: 1,
+			x: 0,
 			y: 0
 		};
 	}
 
 	draw(context: CanvasRenderingContext2D ) {
 		context.drawImage(
-			this.sprites[this.currentSprite],
-			177 * this.frames.x,
+			this.currentSprite,
+			this.spriteCrop.x * this.frames.x,
 			0,
-			177,
-			400,
+			this.spriteCrop.x,
+			this.spriteCrop.y,
 			this.position.x,
 			this.position.y,
 			this.width,
@@ -57,7 +77,15 @@ export default class Player {
 
 	update() {
 		this.frames.x++;
-		if(this.frames.x > 28) {
+		if(this.frames.x > 59
+			&& (this.currentSprite === this.sprites.stand.left
+				|| this.currentSprite === this.sprites.stand.right)
+		) {
+			this.frames.x = 0;
+		} else if(this.frames.x > 29
+			&& (this.currentSprite === this.sprites.run.left
+				|| this.currentSprite === this.sprites.run.right)
+		) {
 			this.frames.x = 0;
 		}
 
