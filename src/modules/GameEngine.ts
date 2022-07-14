@@ -136,7 +136,9 @@ export default class GameEngine {
 		// Horizontal movement for player, platform, and objects
 		if (this.keys.has('ArrowRight') && this.player.position.x < 400) {
 			this.player.velocity.x = this.player.speed;
-		} else if(this.keys.has('ArrowLeft') && this.player.position.x > 100) {
+		} else if((this.keys.has('ArrowLeft') && this.player.position.x > 100)
+			|| (this.keys.has('ArrowLeft') && this.scrollOffset === 0 && this.player.position.x > 0)
+		) {
 			this.player.velocity.x = -this.player.speed;
 		} else {
 			this.player.velocity.x = 0;
@@ -150,7 +152,7 @@ export default class GameEngine {
 				this.genericObjects.forEach((genericObject) => {
 					genericObject.position.x -= this.player.speed * .66;
 				});
-			} else if(this.keys.has('ArrowLeft')) {
+			} else if(this.keys.has('ArrowLeft') && this.scrollOffset > 0) {
 				this.scrollOffset -= this.player.speed;
 				this.platforms.forEach((platform) => {
 					platform.position.x += this.player.speed;
