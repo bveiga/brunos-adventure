@@ -5,9 +5,12 @@ import HillImageSrc from '../images/hills.png';
 import PlatformImageSrc from '../images/platform.png';
 import PlatformSmallImageSrc from "../images/platformSmallTall.png";
 import BgImageSrc from '../images/background.png';
+import spriteRunLeftSrc from '../images/spriteRunLeft.png';
+import spriteRunRightSrc from '../images/spriteRunRight.png';
+import spriteStandLeftSrc from '../images/spriteStandLeft.png';
+import spriteStandRightSrc from '../images/spriteStandRight.png';
 
 export default class GameEngine {
-	activePlatform: number;
 	canvas: HTMLCanvasElement;
 	context: CanvasRenderingContext2D;
 	genericObjects: GenericObject[];
@@ -26,12 +29,9 @@ export default class GameEngine {
 		this.canvas.width = 1024;
 		this.canvas.height = 576;
 
-		this.activePlatform = 0;
-		this.player = new Player(this.canvas.width, this.canvas.height);
+		this.player = new Player(this.canvas.width, this.canvas.height, new Image());
 		this.platforms = [];
 		this.genericObjects = [];
-
-		this.init(false);
 
 		this.keys = new Set();
 		window.addEventListener('keydown', (evt) => {
@@ -61,16 +61,25 @@ export default class GameEngine {
 		});
 	}
 
-	init(isReset: Boolean) {
-		if(isReset) {
-			this.player = new Player(this.canvas.width, this.canvas.height);
-			this.platforms = [];
-			this.genericObjects = [];
-			this.scrollOffset = 0;
-		}
+	reset() {
+		this.platforms = [];
+		this.genericObjects = [];
+		this.scrollOffset = 0;
+
+		// Creating player
+		let playerSprites = [
+			spriteRunLeftSrc,
+			spriteRunRightSrc,
+			spriteStandLeftSrc,
+			spriteStandRightSrc
+		];
+
+		this.loadImage(spriteStandRightSrc).then((image: HTMLImageElement) => {
+			this.player = new Player(this.canvas.width, this.canvas.height, image);
+		});
 
 		// Creating small platforms
-		this.createImage(PlatformSmallImageSrc).then((image: HTMLImageElement) => {
+		this.loadImage(PlatformSmallImageSrc).then((image: HTMLImageElement) => {
 			let newSmallPlatforms = [
 				new Platform({x: 1400, y: this.canvas.height - image.height}, image),
 				new Platform({x: 3010, y: this.canvas.height - image.height - 100}, image)
@@ -79,7 +88,7 @@ export default class GameEngine {
 		});
 
 		// Creating wide platforms
-		this.createImage(PlatformImageSrc).then((image: HTMLImageElement) => {
+		this.loadImage(PlatformImageSrc).then((image: HTMLImageElement) => {
 			let newPlatforms = [
 				new Platform({x: 0, y: this.canvas.height - image.height}, image),
 				new Platform({x: 580 - 3, y: this.canvas.height - image.height}, image),
@@ -91,21 +100,22 @@ export default class GameEngine {
 		});
 
 		// Creating background
-		this.createImage(BgImageSrc).then((image: HTMLImageElement) => {
+		this.loadImage(BgImageSrc).then((image: HTMLImageElement) => {
 			this.genericObjects.push(new GenericObject({x: -1, y: -1}, image));
 		});
 
 		// Creating Hills
-		this.createImage(HillImageSrc).then((image: HTMLImageElement) => {
+		this.loadImage(HillImageSrc).then((image: HTMLImageElement) => {
 			let newHills = [
 				new GenericObject ({x: -1, y: -1}, image),
 				new GenericObject ({x: -1, y: -1}, image)
 			];
 			this.genericObjects.push(...newHills);
 		});
+
 	}
 
-	async createImage(imageSrc: string) {
+	async loadImage(imageSrc: string) {
 		let image = new Image();
 		image.src = imageSrc;
 
@@ -115,6 +125,16 @@ export default class GameEngine {
 			console.log('Error 001: Error decoding image.');
 		}
 		return image;
+	}
+
+	async loadMultipleImages(imageSources: string[]) {
+		let images: HTMLImageElement[] = [];
+		imageSources.forEach(async (src) => {
+			let image = await this.loadImage(src);
+			images.push(image);
+		});
+
+		return images;
 	}
 
 	handleCollision(platform: Platform) {

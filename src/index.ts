@@ -23,13 +23,20 @@ function animate() {
 	// Win Condition
 	if(gameEngine.scrollOffset >= 4000) {
 		console.log('You Win!');
-		gameEngine.init(true);
+		gameEngine.reset();
 	}
 
 	// Lose Condition
 	if (gameEngine.player.position.y > gameEngine.canvas.height - gameEngine.player.height) {
 		console.log('You Lose!');
-		gameEngine.init(true);
+		gameEngine.reset();
 	}
 }
-animate();
+
+async function init() {
+	await gameEngine.reset();
+
+	animate();
+}
+
+init();
