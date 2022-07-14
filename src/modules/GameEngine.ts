@@ -65,6 +65,7 @@ export default class GameEngine {
 			this.player = new Player(this.canvas.width, this.canvas.height);
 			this.platforms = [];
 			this.genericObjects = [];
+			this.scrollOffset = 0;
 		}
 
 		// Creating Platforms

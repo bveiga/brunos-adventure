@@ -23,6 +23,7 @@ function animate() {
 	// Win Condition
 	if(gameEngine.scrollOffset >= 1000) {
 		console.log('You Win!');
+		gameEngine.init(true);
 	}
 
 	// Lose Condition
